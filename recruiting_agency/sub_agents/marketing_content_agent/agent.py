@@ -12,19 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Marketing Content Agent for creating compelling recruiting content."""
+"""Marketing Content Agent for creating compelling recruitment content."""
 
 from google.adk import Agent
-from google.adk.tools import google_search
 
 from . import prompt
 
-MODEL = "gemini-2.0-flash-live-001"
-
 marketing_content_agent = Agent(
-    model=MODEL,
+    model="gemini-1.5-pro-latest",
     name="marketing_content_agent",
     instruction=prompt.MARKETING_CONTENT_AGENT_PROMPT,
     output_key="marketing_content_output",
-    tools=[google_search],
+    tools=[],
 ) 

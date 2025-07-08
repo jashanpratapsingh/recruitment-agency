@@ -1,322 +1,308 @@
 # Recruiting Agency Agent
 
-A comprehensive AI-driven recruiting solution that orchestrates specialized sub-agents to provide end-to-end hiring support, with enhanced blockchain company identification and personalized outreach capabilities.
+A comprehensive AI-powered recruiting agency that orchestrates specialized sub-agents for business development, candidate outreach, marketing content, backend matching, and real-time research to provide end-to-end hiring solutions.
 
-## Overview
+## 🏗️ Architecture
 
-The RecruitingAgencyAgent is a master agent that delegates tasks to specialized sub-agents to provide comprehensive recruiting solutions. It takes high-level prompts like "Help me with hiring for a blockchain startup" and routes tasks to the appropriate specialized agents.
+The recruiting agency consists of a main coordinator agent that orchestrates specialized sub-agents:
 
-## Architecture
+- **Recruiting Coordinator**: Main orchestrator agent
+- **BD Agent**: Business development and market analysis
+- **Candidate Outreach Agent**: Engagement and communication strategies
+- **Marketing Content Agent**: Job descriptions and promotional materials
+- **Backend Matching Agent**: ATS, CRM, and automation recommendations
+- **Google Search Agent**: Real-time information and research fallback
 
-The agent follows a coordinator pattern with four specialized sub-agents:
+## 🚀 Quick Start
 
-### 1. BD Agent (Business Development) - Enhanced
-- **Core Functions:**
-  - `fetch_recent_funding_rounds()` - Identifies blockchain companies with recent funding
-  - `filter_blockchain_companies()` - Filters companies based on criteria
-  - `personalize_outreach()` - Creates personalized outreach strategies with LLM-generated messages
-  - `send_personalized_emails()` - Sends personalized emails to target companies
-  - `book_meeting()` - Develops meeting booking strategies
-- **API Integration Placeholders:**
-  - Crunchbase API for funding data
-  - Dealroom API for European market data
-  - Tracxn API for comprehensive startup data
-  - PitchBook API for detailed financial information
-- **Specialized Features:**
-  - Blockchain ecosystem expertise
-  - Funding round analysis
-  - Target company identification
-  - Personalized outreach automation
-  - **LLM-powered message generation**
-  - **Automated email sending**
+### Installation
 
-### 2. Candidate Outreach Agent
-- Develops comprehensive candidate outreach strategies
-- Creates channel-specific engagement tactics
-- Designs messaging frameworks and communication templates
-- Optimizes candidate experience and relationship building
+```bash
+# Install dependencies
+poetry install
 
-### 3. Marketing Content Agent
-- Creates compelling job descriptions and promotional content
-- Develops employer branding materials
-- Designs social media and email marketing campaigns
-- Crafts inclusive and engaging recruitment content
-
-### 4. Backend Matching Agent
-- Recommends optimal ATS (Applicant Tracking System) solutions
-- Designs CRM integration strategies
-- Provides analytics and reporting tool recommendations
-- Creates workflow automation solutions
-
-## Enhanced BD Agent Features
-
-### Blockchain Company Identification
-The BD Agent is specifically designed to identify and engage blockchain companies that have recently raised funding:
-
-```python
-from recruiting_agency.sub_agents.bd_agent.tools import (
-    fetch_recent_funding_rounds,
-    filter_blockchain_companies,
-    personalize_outreach,
-    send_personalized_emails,
-    generate_personalized_message
-)
-
-# Fetch companies with recent funding
-companies = fetch_recent_funding_rounds(
-    sector="blockchain",
-    min_funding_amount=10000000,
-    timeframe_days=90
-)
-
-# Filter target companies
-target_companies = filter_blockchain_companies(
-    companies=companies,
-    min_funding=20000000,
-    target_stages=["Series A", "Series B"]
-)
-
-# Create personalized outreach with LLM-generated messages
-outreach_strategies = personalize_outreach(
-    target_companies=target_companies,
-    message_types=["email", "linkedin"]
-)
-
-# Send personalized emails
-email_results = send_personalized_emails(outreach_strategies, dry_run=True)
+# Activate virtual environment
+poetry shell
 ```
-
-### Personalized Message Generation
-The BD Agent uses LLM logic to generate custom messages for each company:
-
-#### Email Template Features:
-- Personalized greeting with key decision maker
-- Congratulatory message referencing funding round
-- Company-specific value proposition
-- Call-to-action for meeting
-- Professional signature
-
-#### LinkedIn Template Features:
-- Shorter, more casual tone
-- Emoji usage for engagement
-- Direct call-to-action
-- Professional but approachable
-
-### Automated Email Sending
-The agent can send personalized emails on your behalf:
-
-```python
-# Generate personalized message for a specific company
-company = {
-    "company_name": "Chainlink Labs",
-    "funding_amount": 225000000,
-    "funding_round": "Series B",
-    "description": "leading decentralized oracle networks",
-    "hiring_plans": "aggressive hiring for engineering roles",
-    "key_people": ["Sergey Nazarov", "Steve Ellis"]
-}
-
-# Generate email message
-email_message = generate_personalized_message(company, "email")
-print(f"Subject: {email_message['subject']}")
-print(f"Body: {email_message['body']}")
-
-# Send the email
-send_email(
-    to_email="contact@chainlinklabs.com",
-    subject=email_message['subject'],
-    body=email_message['body']
-)
-```
-
-### API Integration
-The BD Agent integrates with multiple funding data APIs to fetch real-time company and funding information:
-
-- **Tracxn API**: Startup analytics and funding trends (prioritized)
-- **Crunchbase API**: Comprehensive funding and company data
-- **Dealroom API**: European market insights
-- **PitchBook API**: Detailed financial information
-
-#### API Features
-- **Tracxn-first approach**: Prioritizes Tracxn API when available for optimal blockchain data
-- **Multi-source data aggregation**: Combines data from all available APIs
-- **Duplicate removal**: Automatically removes duplicate companies across sources
-- **Data standardization**: Normalizes data from different API formats
-- **Error handling**: Graceful degradation when APIs are unavailable
-- **Fallback data**: Returns sample data when no APIs are configured
-- **Filtering options**: Filter by funding amount, company stage, sector, timeframe
-- **Sorting**: Companies sorted by funding amount (highest first)
-
-## Usage
 
 ### Basic Usage
 
 ```python
-from recruiting_agency import root_agent
+from recruiting_agency.agent_factory import create_auto_agent
 
-# Start a conversation with the recruiting coordinator
-response = root_agent.chat("Help me with hiring for a blockchain startup")
+# Create the main agent
+agent = create_auto_agent()
+
+# Use the agent
+response = agent.invoke({
+    "query": "I need help hiring blockchain developers for my startup"
+})
 ```
 
-### Enhanced BD Agent Usage
+## 🔧 Sub-Agents
 
+### BD Agent (Business Development)
+
+Specializes in identifying blockchain companies with recent funding and business development activities.
+
+**Features:**
+- Fetch recent funding rounds from multiple APIs
+- Filter blockchain companies by criteria
+- Personalize outreach messages
+- Send emails and book meetings
+
+**Example:**
 ```python
-# Run the complete BD Agent workflow
-python bd_agent_example.py
+from recruiting_agency.agent_factory import AgentFactory
 
-# Run the enhanced workflow with email sending
-python enhanced_bd_example.py
+bd_agent = AgentFactory.create_bd_agent()
+response = bd_agent.invoke({
+    "query": "Find blockchain companies with recent Series A funding"
+})
 ```
 
-### Example Interaction
+### Candidate Outreach Agent
 
+Handles candidate engagement and communication strategies.
+
+**Features:**
+- Personalized messaging
+- Multi-channel outreach
+- Follow-up strategies
+- Engagement tracking
+
+### Marketing Content Agent
+
+Creates job descriptions and promotional materials.
+
+**Features:**
+- Job description generation
+- Employer branding content
+- Social media campaigns
+- A/B testing strategies
+
+### Backend Matching Agent
+
+Recommends ATS, CRM, and automation solutions.
+
+**Features:**
+- Platform comparisons
+- Integration recommendations
+- Automation workflows
+- Analytics setup
+
+### Google Search Agent
+
+Provides real-time information and research when other agents need current data.
+
+**Features:**
+- Real-time information retrieval
+- Current market data and trends
+- Fact verification
+- Research support for other agents
+- Fallback for outdated information
+
+**Example:**
+```python
+from recruiting_agency.agent_factory import AgentFactory
+
+search_agent = AgentFactory.create_google_search_agent()
+response = search_agent.invoke({
+    "query": "What are the current salary trends for blockchain developers?"
+})
 ```
-User: "Help me with hiring for a blockchain startup"
 
-Agent: "Hello! I'm your Recruiting Agency Coordinator, here to help you navigate the complex world of hiring and talent acquisition..."
+## 🔄 Fallback Strategy
 
-[Agent then guides through the 4-step process:
-1. Business Development Analysis (Enhanced with blockchain focus and email sending)
-2. Candidate Outreach Strategy  
-3. Marketing Content Creation
-4. Backend Matching and Integration]
+The Google Search Agent serves as a fallback when other agents cannot provide current or accurate information:
+
+- **BD Agent** needs recent funding data → Google Search Agent
+- **Marketing Agent** needs current trends → Google Search Agent  
+- **Backend Agent** needs latest tool info → Google Search Agent
+- **Outreach Agent** needs market insights → Google Search Agent
+
+## 🎛️ Model Selection
+
+The system supports different interaction types with appropriate model selection:
+
+### Text Interaction
+```python
+text_agent = AgentFactory.create_main_agent("text")
 ```
 
-## Features
+### Voice Interaction
+```python
+voice_agent = AgentFactory.create_main_agent("voice")
+```
 
-- **Comprehensive Analysis**: Each sub-agent provides detailed, research-backed insights
-- **Blockchain Expertise**: Specialized knowledge of blockchain ecosystem and funding trends
-- **Multi-Channel Strategy**: Covers all aspects of modern recruiting
-- **Data-Driven Recommendations**: Uses current market research and best practices
-- **API Integration Ready**: Placeholders for major funding data providers
-- **LLM-Powered Personalization**: Custom message generation for each company
-- **Automated Email Sending**: Send personalized emails on your behalf
-- **Scalable Solutions**: Adapts to different company sizes and industries
-- **Integration Focus**: Recommends technical solutions and automation
+### Auto-Detection
+```python
+auto_agent = AgentFactory.create_main_agent("auto")
+```
 
-## Installation
+## 📊 API Integration
+
+### BD Agent APIs
+
+The BD Agent integrates with multiple funding data APIs:
+
+- **Crunchbase API**: Company and funding data
+- **Dealroom API**: European startup ecosystem
+- **Tracxn API**: Global startup intelligence
+- **PitchBook API**: Private market data
+
+### Environment Setup
+
+Create a `.env` file with your API keys:
 
 ```bash
-cd python/agents/recruiting-agency
-pip install -e .
+# Crunchbase API
+CRUNCHBASE_API_KEY=your_crunchbase_key
+
+# Dealroom API  
+DEALROOM_API_KEY=your_dealroom_key
+
+# Tracxn API
+TRACXN_API_KEY=your_tracxn_key
+
+# PitchBook API
+PITCHBOOK_API_KEY=your_pitchbook_key
+
+# Email Configuration (for outreach)
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+EMAIL_USERNAME=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password
 ```
 
-## Dependencies
+### API Key Setup
 
-- google-adk
-- google-genai
-- pydantic
-- python-dotenv
+#### Crunchbase API
+1. Visit [Crunchbase API](https://data.crunchbase.com/docs/using-the-api)
+2. Sign up for an account
+3. Request API access
+4. Get your API key from the dashboard
 
-## Email Configuration
+#### Dealroom API
+1. Visit [Dealroom](https://dealroom.co/)
+2. Sign up for an account
+3. Contact support for API access
+4. Receive API credentials
 
-To enable email sending functionality:
+#### Tracxn API
+1. Visit [Tracxn](https://tracxn.com/)
+2. Sign up for an account
+3. Request API access
+4. Get API key from your account
 
-1. **Set Environment Variables:**
-   ```bash
-   export BD_AGENT_EMAIL='your-email@gmail.com'
-   export BD_AGENT_EMAIL_PASSWORD='your-app-password'
-   ```
+#### PitchBook API
+1. Visit [PitchBook](https://pitchbook.com/)
+2. Sign up for an account
+3. Contact sales for API access
+4. Receive API credentials
 
-2. **Configure SMTP Settings (Optional):**
-   ```python
-   send_personalized_emails(
-       outreach_strategies=strategies,
-       smtp_server="smtp.gmail.com",
-       smtp_port=587,
-       dry_run=False  # Set to False to actually send emails
-   )
-   ```
+## 🧪 Testing
 
-3. **Gmail App Password Setup:**
-   - Enable 2-factor authentication
-   - Generate app password for the BD agent
-   - Use app password instead of regular password
-
-## API Integration Setup
-
-The BD Agent now includes full API integration for real-time funding data:
-
-### 1. API Configuration
-
-Set the following environment variables to enable API integration:
-
+### Run Tests
 ```bash
-export CRUNCHBASE_API_KEY="your_crunchbase_api_key"
-export DEALROOM_API_KEY="your_dealroom_api_key"
-export TRACXN_API_KEY="your_tracxn_api_key"
-export PITCHBOOK_API_KEY="your_pitchbook_api_key"
+# Run all tests
+poetry run pytest
+
+# Run specific test
+poetry run pytest tests/test_bd_agent.py
 ```
 
-### 2. API Setup Instructions
-
-**Crunchbase API:**
-- Visit: https://data.crunchbase.com/docs/using-the-api
-- Sign up for API access
-- Set environment variable: `CRUNCHBASE_API_KEY`
-
-**Dealroom API:**
-- Visit: https://dealroom.co/api
-- Request API access
-- Set environment variable: `DEALROOM_API_KEY`
-
-**Tracxn API:**
-- Visit: https://tracxn.com/api
-- Sign up for API access
-- Set environment variable: `TRACXN_API_KEY`
-
-**PitchBook API:**
-- Visit: https://pitchbook.com/api
-- Request API access
-- Set environment variable: `PITCHBOOK_API_KEY`
-
-### 3. Testing API Integration
+### Example Scripts
 
 ```bash
-# Test the API integration
-python api_integration_example.py
+# Test BD Agent
+python3 bd_agent_example.py
 
-# Test Tracxn-only workflow
-python tracxn_only_example.py
+# Test Google Search Agent
+python3 google_search_agent_example.py
 
-# Run tests for API functionality
-python -m pytest tests/test_api_integration.py -v
-```
-
-### 4. API Features
-
-- **Automatic data aggregation** from all available APIs
-- **Duplicate removal** across multiple data sources
-- **Error handling** with graceful degradation
-- **Fallback to sample data** when APIs are unavailable
-- **Configurable filtering** by funding amount, stage, sector, timeframe
-- **Data standardization** across different API formats
-
-## Testing
-
-Run the comprehensive test suite:
-
-```bash
-# Test BD Agent tools
-python -m pytest tests/test_bd_agent_tools.py -v
-
-# Test email functionality
-python -m pytest tests/test_email_functionality.py -v
+# Test fallback functionality
+python3 test_google_search_fallback.py
 
 # Test API integration
-python -m pytest tests/test_api_integration.py -v
+python3 api_integration_example.py
 
-# Run enhanced example
-python enhanced_bd_example.py
-
-# Test API integration example
-python api_integration_example.py
+# Test Tracxn-only mode
+python3 tracxn_only_example.py
 ```
 
-## License
+## 🚀 Deployment
 
-Apache License 2.0
+### Render Deployment
 
-## Disclaimer
+The agent is configured for deployment on Render with Poetry:
 
-This tool is for educational and informational purposes only. The information provided does not constitute professional recruiting advice, and users should consult with qualified professionals before making hiring decisions. 
+```yaml
+# render.yaml
+services:
+  - type: web
+    name: recruiting-agency
+    env: python
+    buildCommand: poetry install
+    startCommand: python start_render.py
+```
+
+### Local Development
+
+```bash
+# Start the web interface
+adk web
+
+# Or use the wrapper script
+python start_render.py
+```
+
+## 📁 Project Structure
+
+```
+recruiting-agency/
+├── recruiting_agency/
+│   ├── __init__.py
+│   ├── agent.py
+│   ├── agent_factory.py
+│   ├── model_selector.py
+│   ├── prompt.py
+│   └── sub_agents/
+│       ├── bd_agent/
+│       ├── candidate_outreach_agent/
+│       ├── marketing_content_agent/
+│       ├── backend_matching_agent/
+│       └── google_search_agent/
+├── tests/
+├── deployment/
+├── eval/
+├── pyproject.toml
+└── README.md
+```
+
+## 🔍 Key Features
+
+- **Multi-Agent Architecture**: Specialized sub-agents for different recruiting tasks
+- **Real-time Data**: Google Search Agent for current information
+- **API Integration**: Multiple funding data sources
+- **Model Selection**: Support for voice and text interactions
+- **Fallback Strategy**: Automatic redirection to Google Search Agent
+- **Deployment Ready**: Configured for Render deployment
+
+## 📚 Documentation
+
+- [Model Selection Guide](MODEL_SELECTION.md)
+- [Auto-Detection Summary](AUTO_DETECTION_SUMMARY.md)
+- [Interaction Examples](interaction_examples.py)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the Apache License 2.0. 

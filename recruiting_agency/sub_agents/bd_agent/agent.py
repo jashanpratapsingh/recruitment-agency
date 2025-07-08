@@ -15,7 +15,6 @@
 """BD Agent for business development analysis in recruiting."""
 
 from google.adk import Agent
-from google.adk.tools import google_search
 
 from . import prompt
 from .tools import (
@@ -25,8 +24,10 @@ from .tools import (
     send_personalized_emails_tool,
     book_meeting_tool
 )
+from ...model_selector import get_model_for_interaction, TEXT_MODEL
 
-MODEL = "gemini-2.0-flash-live-001"
+# Default to text model for safety, can be overridden per interaction
+MODEL = get_model_for_interaction("text")
 
 bd_agent = Agent(
     model=MODEL,
@@ -34,7 +35,6 @@ bd_agent = Agent(
     instruction=prompt.BD_AGENT_PROMPT,
     output_key="business_development_analysis_output",
     tools=[
-        google_search,
         fetch_recent_funding_rounds_tool,
         filter_blockchain_companies_tool,
         personalize_outreach_tool,

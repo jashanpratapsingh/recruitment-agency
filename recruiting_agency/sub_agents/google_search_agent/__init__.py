@@ -12,16 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Candidate Outreach Agent for developing outreach strategies."""
+"""Google Search Agent for providing real-time information and research."""
 
-from google.adk import Agent
-
-from . import prompt
-
-candidate_outreach_agent = Agent(
-    model="gemini-1.5-pro-latest",
-    name="candidate_outreach_agent",
-    instruction=prompt.CANDIDATE_OUTREACH_AGENT_PROMPT,
-    output_key="candidate_outreach_output",
-    tools=[],
-) 
+from .agent import google_search_agent 

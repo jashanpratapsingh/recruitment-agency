@@ -14,33 +14,24 @@
 
 """Recruiting Agency Agent: Orchestrates specialized sub-agents for comprehensive hiring solutions."""
 
-from google.adk.agents import LlmAgent
-from google.adk.tools.agent_tool import AgentTool
-
-from . import prompt
-from .sub_agents.bd_agent import bd_agent
-from .sub_agents.candidate_outreach_agent import candidate_outreach_agent
-from .sub_agents.marketing_content_agent import marketing_content_agent
-from .sub_agents.backend_matching_agent import backend_matching_agent
-
-MODEL = "gemini-2.0-flash-live-001"
-
-recruiting_coordinator = LlmAgent(
-    name="recruiting_coordinator",
-    model=MODEL,
-    description=(
-        "Orchestrates a comprehensive recruiting process by coordinating specialized "
-        "sub-agents for business development, candidate outreach, marketing content, "
-        "and backend matching to provide end-to-end hiring solutions."
-    ),
-    instruction=prompt.RECRUITING_COORDINATOR_PROMPT,
-    output_key="recruiting_coordinator_output",
-    tools=[
-        AgentTool(agent=bd_agent),
-        AgentTool(agent=candidate_outreach_agent),
-        AgentTool(agent=marketing_content_agent),
-        AgentTool(agent=backend_matching_agent),
-    ],
+# Import the factory functions for flexible agent creation
+from .agent_factory import (
+    create_recruiting_coordinator,
+    create_voice_agent,
+    create_text_agent,
+    create_auto_agent,
+    root_agent
 )
 
-root_agent = recruiting_coordinator 
+# For backward compatibility, also export the default agent
+recruiting_coordinator = root_agent
+
+# Export factory functions for dynamic agent creation
+__all__ = [
+    "create_recruiting_coordinator",
+    "create_voice_agent", 
+    "create_text_agent",
+    "create_auto_agent",
+    "recruiting_coordinator",
+    "root_agent"
+] 

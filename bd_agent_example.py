@@ -1,36 +1,25 @@
-# Copyright 2025 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#!/usr/bin/env python3
+"""
+Example script demonstrating the BD Agent workflow for blockchain company identification.
+"""
 
-"""Example usage of the enhanced BD Agent for blockchain company identification."""
-
+import os
 import sys
-from pathlib import Path
+from typing import List, Dict, Any
 
-# Add the project root to the Python path
-project_root = Path(__file__).parent
-sys.path.insert(0, str(project_root))
+# Add the project root to the path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'recruiting_agency'))
 
 from recruiting_agency.sub_agents.bd_agent.tools import (
     fetch_recent_funding_rounds,
     filter_blockchain_companies,
     personalize_outreach,
-    book_meeting
+    send_personalized_emails,
+    generate_personalized_message
 )
 
-
 def demonstrate_bd_agent_workflow():
-    """Demonstrate the complete BD Agent workflow for blockchain companies."""
+    """Demonstrate the complete BD Agent workflow."""
     
     print("🚀 BD Agent - Blockchain Company Identification Workflow")
     print("=" * 60)
@@ -41,114 +30,129 @@ def demonstrate_bd_agent_workflow():
     
     companies = fetch_recent_funding_rounds(
         sector="blockchain",
-        min_funding_amount=10000000,
-        timeframe_days=90,
-        company_stage="Series A"
+        min_funding_amount=10000000,  # $10M minimum
+        timeframe_days=90
     )
     
     print(f"Found {len(companies)} companies with recent funding:")
     for company in companies:
         print(f"  • {company['company_name']} - ${company['funding_amount']:,} ({company['funding_round']})")
     
-    # Step 2: Filter blockchain companies
+    # Step 2: Filter target companies
     print("\n🎯 Step 2: Filtering Target Companies")
     print("-" * 40)
     
     target_companies = filter_blockchain_companies(
         companies=companies,
         min_funding=20000000,  # $20M minimum
-        target_stages=["Series A", "Series B"],
-        locations=["San Francisco", "New York", "Remote"],
-        remote_friendly=True
+        target_stages=["Series A", "Series B", "Series C"]
     )
     
     print(f"Filtered to {len(target_companies)} target companies:")
     for company in target_companies:
-        print(f"  • {company['company_name']} - {company['location']} - {company['hiring_plans']}")
+        print(f"  • {company['company_name']} - {company['location']} - {company.get('hiring_plans', 'Aggressive hiring for engineering and product roles')}")
     
-    # Step 3: Personalize outreach
+    # Step 3: Create personalized outreach
     print("\n💬 Step 3: Creating Personalized Outreach")
     print("-" * 40)
     
     outreach_strategies = personalize_outreach(
         target_companies=target_companies,
-        recruiting_services=[
-            "Technical Recruiting",
-            "Executive Search",
-            "Employer Branding"
-        ]
+        message_types=["email", "linkedin"]
     )
     
     print(f"Created {len(outreach_strategies)} personalized outreach strategies:")
+    
     for strategy in outreach_strategies:
         print(f"\n  📧 {strategy['company_name']}:")
-        print(f"     Message: {strategy['personalized_message'][:100]}...")
-        print(f"     Channels: {', '.join(strategy['outreach_channels'])}")
-        print(f"     Decision Makers: {', '.join(strategy['decision_makers'])}")
+        print(f"     Funding: {strategy['funding_info']}")
+        print(f"     Value Prop: {strategy['value_proposition']}")
+        
+        # Show email message preview
+        if 'email' in strategy['generated_messages']:
+            email_msg = strategy['generated_messages']['email']
+            print(f"     Subject: {email_msg['subject']}")
+            print(f"     Message: {email_msg['body'][:100]}...")
+        
+        # Show LinkedIn message preview
+        if 'linkedin' in strategy['generated_messages']:
+            linkedin_msg = strategy['generated_messages']['linkedin']
+            print(f"     LinkedIn: {linkedin_msg['body'][:100]}...")
     
-    # Step 4: Book meetings
-    print("\n📅 Step 4: Meeting Booking Strategies")
+    # Step 4: Send personalized emails (dry run)
+    print("\n📧 Step 4: Sending Personalized Emails (Dry Run)")
     print("-" * 40)
     
-    meeting_strategies = book_meeting(
+    email_results = send_personalized_emails(
         outreach_strategies=outreach_strategies,
-        calendar_integration=True,
-        crm_integration=True
+        dry_run=True  # Don't actually send emails
     )
     
-    print(f"Created {len(meeting_strategies)} meeting strategies:")
-    for strategy in meeting_strategies:
-        print(f"\n  📅 {strategy['company_name']}:")
-        print(f"     Objective: {strategy['meeting_objective']}")
-        print(f"     Calendar: {', '.join(strategy['calendar_integration']['platforms'])}")
-        print(f"     CRM: {', '.join(strategy['crm_integration']['platforms'])}")
+    print(f"Email results for {len(email_results)} companies:")
+    for result in email_results:
+        status_icon = "✅" if result['status'] == 'dry_run' else "❌"
+        print(f"  {status_icon} {result['company_name']}: {result['status']}")
     
-    # Summary
-    print("\n🎉 Workflow Summary")
+    # Step 5: Generate sample personalized message
+    print("\n✉️  Step 5: Sample Personalized Message")
     print("-" * 40)
-    print(f"• Identified {len(companies)} companies with recent funding")
-    print(f"• Filtered to {len(target_companies)} target companies")
-    print(f"• Created {len(outreach_strategies)} personalized outreach strategies")
-    print(f"• Developed {len(meeting_strategies)} meeting booking strategies")
+    
+    if target_companies:
+        sample_company = target_companies[0]
+        email_message = generate_personalized_message(sample_company, "email")
+        
+        print(f"Sample email for {sample_company['company_name']}:")
+        print(f"Subject: {email_message['subject']}")
+        print(f"Body: {email_message['body']}")
     
     print("\n✅ BD Agent workflow completed successfully!")
+    print("\nKey Features Demonstrated:")
+    print("- Real-time funding data fetching (with API fallbacks)")
+    print("- Intelligent company filtering based on criteria")
+    print("- LLM-powered personalized message generation")
+    print("- Multi-channel outreach strategies (email + LinkedIn)")
+    print("- Automated email sending capabilities")
+    print("- Comprehensive error handling and logging")
 
-
-def demonstrate_api_integration_placeholders():
-    """Demonstrate the API integration placeholders."""
+def demonstrate_api_integration():
+    """Demonstrate API integration capabilities."""
     
-    print("\n🔌 API Integration Placeholders")
+    print("\n🔌 API Integration Demo")
     print("=" * 40)
     
-    print("The following API integrations are ready for implementation:")
-    print("\n1. Crunchbase API:")
-    print("   - Endpoint: https://api.crunchbase.com/v3.1/organizations")
-    print("   - Use case: Fetch funding data and company information")
-    print("   - Environment variable: CRUNCHBASE_API_KEY")
+    # Check available APIs
+    api_keys = {
+        "TRACXN_API_KEY": os.getenv("TRACXN_API_KEY"),
+        "CRUNCHBASE_API_KEY": os.getenv("CRUNCHBASE_API_KEY"),
+        "DEALROOM_API_KEY": os.getenv("DEALROOM_API_KEY"),
+        "PITCHBOOK_API_KEY": os.getenv("PITCHBOOK_API_KEY")
+    }
     
-    print("\n2. Dealroom API:")
-    print("   - Endpoint: https://api.dealroom.co/v1/companies")
-    print("   - Use case: European market data and funding insights")
-    print("   - Environment variable: DEALROOM_API_KEY")
+    print("API Key Status:")
+    for api_name, key in api_keys.items():
+        status = "✅ Available" if key else "❌ Not configured"
+        print(f"  {api_name}: {status}")
     
-    print("\n3. Tracxn API:")
-    print("   - Endpoint: https://api.tracxn.com/api/1.0/companies")
-    print("   - Use case: Comprehensive startup data and analytics")
-    print("   - Environment variable: TRACXN_API_KEY")
-    
-    print("\n4. PitchBook API:")
-    print("   - Endpoint: https://api.pitchbook.com/v1/companies")
-    print("   - Use case: Detailed financial information and valuations")
-    print("   - Environment variable: PITCHBOOK_API_KEY")
-    
-    print("\nTo implement these APIs:")
-    print("1. Obtain API keys from respective providers")
-    print("2. Set environment variables")
-    print("3. Uncomment and configure API calls in tools.py")
-    print("4. Add error handling and rate limiting")
-    print("5. Test with real data")
+    if not any(api_keys.values()):
+        print("\n💡 To enable real API data:")
+        print("  1. Get API keys from the respective providers")
+        print("  2. Set environment variables:")
+        print("     export TRACXN_API_KEY='your_key'")
+        print("     export CRUNCHBASE_API_KEY='your_key'")
+        print("     export DEALROOM_API_KEY='your_key'")
+        print("     export PITCHBOOK_API_KEY='your_key'")
 
+def main():
+    """Run the BD Agent demonstration."""
+    
+    try:
+        demonstrate_bd_agent_workflow()
+        demonstrate_api_integration()
+        
+    except Exception as e:
+        print(f"\n❌ Error during demonstration: {e}")
+        import traceback
+        traceback.print_exc()
 
 if __name__ == "__main__":
-    demonstrate_bd_agent_workflow()
-    demonstrate_api_integration_placeholders() 
+    main() 

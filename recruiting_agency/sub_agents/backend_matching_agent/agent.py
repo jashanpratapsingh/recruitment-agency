@@ -12,19 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Backend Matching Agent for recommending technical solutions and integrations."""
+"""Backend Matching Agent for recommending technical solutions."""
 
 from google.adk import Agent
-from google.adk.tools import google_search
 
 from . import prompt
 
-MODEL = "gemini-2.0-flash-live-001"
-
 backend_matching_agent = Agent(
-    model=MODEL,
+    model="gemini-1.5-pro-latest",
     name="backend_matching_agent",
     instruction=prompt.BACKEND_MATCHING_AGENT_PROMPT,
     output_key="backend_matching_output",
-    tools=[google_search],
+    tools=[],
 ) 
