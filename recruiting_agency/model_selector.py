@@ -6,8 +6,7 @@ import os
 from typing import Literal, Optional, Dict, Any
 from urllib.parse import urlparse
 
-# Model configurations
-VOICE_MODEL = "gemini-2.0-flash-live-001"
+# Model configurations - Simplified to use only text model
 TEXT_MODEL = "gemini-1.5-pro-latest"
 
 InteractionType = Literal["voice", "text", "auto"]
@@ -207,29 +206,14 @@ def get_model_for_interaction(
     if force_model:
         return force_model
     
-    if interaction_type == "voice":
-        return VOICE_MODEL
-    elif interaction_type == "text":
-        return TEXT_MODEL
-    elif interaction_type == "auto":
-        # Auto-detect based on multiple factors
-        detected_type = auto_detect_interaction_type(
-            headers=headers,
-            input_data=input_data,
-            url=url,
-            user_agent=user_agent
-        )
-        
-        if detected_type == "voice":
-            return VOICE_MODEL
-        else:
-            return TEXT_MODEL
-    else:
-        raise ValueError(f"Invalid interaction_type: {interaction_type}")
+    # Always use the text model for all interactions
+    return TEXT_MODEL
 
 def is_voice_model(model: str) -> bool:
     """Check if a model supports voice interactions."""
-    return model == VOICE_MODEL
+    # Since we're using the same model for both voice and text,
+    # we'll consider it voice-capable if it's the current model
+    return model == TEXT_MODEL
 
 def is_text_model(model: str) -> bool:
     """Check if a model supports text interactions."""
@@ -237,17 +221,9 @@ def is_text_model(model: str) -> bool:
 
 def get_model_capabilities(model: str) -> dict:
     """Get the capabilities of a specific model."""
-    if is_voice_model(model):
+    if model == TEXT_MODEL:
         return {
             "voice": True,
-            "text": True,
-            "streaming": True,
-            "real_time": True,
-            "turn_detection": True
-        }
-    elif is_text_model(model):
-        return {
-            "voice": False,
             "text": True,
             "streaming": False,
             "real_time": False,

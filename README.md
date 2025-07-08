@@ -123,22 +123,23 @@ The Google Search Agent serves as a fallback when other agents cannot provide cu
 
 ## 🎛️ Model Selection
 
-The system supports different interaction types with appropriate model selection:
+The system uses a simplified model selection that ensures reliability:
 
-### Text Interaction
+### Single Model Approach
 ```python
-text_agent = AgentFactory.create_main_agent("text")
-```
-
-### Voice Interaction
-```python
+# All interaction types use the same reliable model
 voice_agent = AgentFactory.create_main_agent("voice")
+text_agent = AgentFactory.create_main_agent("text")
+auto_agent = AgentFactory.create_main_agent("auto")
+
+# All use gemini-1.5-pro-latest
 ```
 
-### Auto-Detection
-```python
-auto_agent = AgentFactory.create_main_agent("auto")
-```
+### Benefits
+- ✅ **No API errors** - Uses only supported models
+- ✅ **Consistent performance** - Same model for all interactions
+- ✅ **Simple configuration** - No complex model selection logic
+- ✅ **Reliable deployment** - Works across all environments
 
 ## 📊 API Integration
 
@@ -229,6 +230,9 @@ python3 api_integration_example.py
 
 # Test Tracxn-only mode
 python3 tracxn_only_example.py
+
+# Test simplified model selection
+python3 test_simplified_model.py
 ```
 
 ## 🚀 Deployment
@@ -285,7 +289,7 @@ recruiting-agency/
 - **Multi-Agent Architecture**: Specialized sub-agents for different recruiting tasks
 - **Real-time Data**: Google Search Agent for current information
 - **API Integration**: Multiple funding data sources
-- **Model Selection**: Support for voice and text interactions
+- **Simplified Model Selection**: Reliable single-model approach
 - **Fallback Strategy**: Automatic redirection to Google Search Agent
 - **Deployment Ready**: Configured for Render deployment
 
