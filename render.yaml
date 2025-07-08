@@ -5,7 +5,7 @@ services:
     buildCommand: |
       pip install poetry
       poetry install --no-interaction --no-root
-    startCommand: poetry run adk web
+    startCommand: python start_render.py
     envVars:
       - key: PYTHONUNBUFFERED
         value: "1" 
