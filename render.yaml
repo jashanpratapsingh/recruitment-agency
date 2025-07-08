@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: recruiting-agency
+    runtime: python
+    buildCommand: |
+      pip install poetry
+      poetry install --no-interaction --no-root
+    startCommand: poetry run adk web
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1" 
