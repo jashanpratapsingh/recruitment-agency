@@ -19,7 +19,7 @@ from google.adk.tools import google_search
 
 from . import prompt
 
-MODEL = "gemini-2.5-pro"
+MODEL = "gemini-2.0-flash-live-001"
 
 candidate_outreach_agent = Agent(
     model=MODEL,

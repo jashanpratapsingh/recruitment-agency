@@ -497,9 +497,9 @@ def _get_sample_companies() -> List[Dict[str, Any]]:
 
 def filter_blockchain_companies(
     companies: List[Dict[str, Any]],
-    min_funding: float = 10000000,
-    target_stages: List[str] = None,
-    locations: List[str] = None,
+    min_funding: float = 10000000.0,
+    target_stages: Optional[List[str]] = None,
+    locations: Optional[List[str]] = None,
     remote_friendly: bool = True
 ) -> List[Dict[str, Any]]:
     """
@@ -622,8 +622,8 @@ Best,
 
 def personalize_outreach(
     target_companies: List[Dict[str, Any]],
-    recruiting_services: List[str] = None,
-    message_types: List[str] = None
+    recruiting_services: Optional[List[str]] = None,
+    message_types: Optional[List[str]] = None
 ) -> List[Dict[str, Any]]:
     """
     Create personalized outreach strategies for target companies using LLM-generated messages.
@@ -682,11 +682,11 @@ def send_email(
     to_email: str,
     subject: str,
     body: str,
-    from_email: str = None,
-    smtp_server: str = None,
+    from_email: Optional[str] = None,
+    smtp_server: Optional[str] = None,
     smtp_port: int = 587,
-    username: str = None,
-    password: str = None
+    username: Optional[str] = None,
+    password: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Send an email using SMTP.
@@ -761,11 +761,11 @@ def send_email(
 
 def send_personalized_emails(
     outreach_strategies: List[Dict[str, Any]],
-    from_email: str = None,
-    smtp_server: str = None,
+    from_email: Optional[str] = None,
+    smtp_server: Optional[str] = None,
     smtp_port: int = 587,
-    username: str = None,
-    password: str = None,
+    username: Optional[str] = None,
+    password: Optional[str] = None,
     dry_run: bool = True
 ) -> List[Dict[str, Any]]:
     """

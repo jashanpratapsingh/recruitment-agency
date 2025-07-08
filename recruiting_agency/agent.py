@@ -23,7 +23,7 @@ from .sub_agents.candidate_outreach_agent import candidate_outreach_agent
 from .sub_agents.marketing_content_agent import marketing_content_agent
 from .sub_agents.backend_matching_agent import backend_matching_agent
 
-MODEL = "gemini-2.5-pro"
+MODEL = "gemini-2.0-flash-live-001"
 
 recruiting_coordinator = LlmAgent(
     name="recruiting_coordinator",
