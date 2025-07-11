@@ -13,6 +13,7 @@ from .sub_agents.candidate_outreach_agent import candidate_outreach_agent
 from .sub_agents.marketing_content_agent import marketing_content_agent
 from .sub_agents.backend_matching_agent import backend_matching_agent
 from .sub_agents.google_search_agent import google_search_agent
+from .sub_agents.email_discovery_agent import email_discovery_agent
 
 def create_recruiting_coordinator(
     interaction_type: InteractionType = "auto",
@@ -61,6 +62,7 @@ def create_recruiting_coordinator(
             AgentTool(agent=marketing_content_agent),
             AgentTool(agent=backend_matching_agent),
             AgentTool(agent=google_search_agent),
+            AgentTool(agent=email_discovery_agent),
         ],
     )
 
