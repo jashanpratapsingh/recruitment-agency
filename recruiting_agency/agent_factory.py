@@ -14,6 +14,7 @@ from .sub_agents.marketing_content_agent import marketing_content_agent
 from .sub_agents.backend_matching_agent import backend_matching_agent
 from .sub_agents.google_search_agent import google_search_agent
 from .sub_agents.email_discovery_agent import email_discovery_agent
+from .sub_agents.email_sender_agent import email_sender_agent
 
 def create_recruiting_coordinator(
     interaction_type: InteractionType = "auto",
@@ -63,6 +64,7 @@ def create_recruiting_coordinator(
             AgentTool(agent=backend_matching_agent),
             AgentTool(agent=google_search_agent),
             AgentTool(agent=email_discovery_agent),
+            AgentTool(agent=email_sender_agent),
         ],
     )
 
@@ -247,6 +249,28 @@ class AgentFactory:
             instruction=search_prompt.GOOGLE_SEARCH_AGENT_PROMPT,
             output_key="google_search_output",
             tools=[google_search],
+        )
+    
+    @staticmethod
+    def create_email_sender_agent(
+        interaction_type: InteractionType = "auto",
+        force_model: Optional[str] = None,
+        headers: Optional[Dict[str, str]] = None,
+        input_data: Optional[Any] = None,
+        url: Optional[str] = None,
+        user_agent: Optional[str] = None
+    ) -> Agent:
+        """
+        Create the dedicated email sender agent.
+        """
+        from .sub_agents.email_sender_agent import create_email_sender_agent
+        return create_email_sender_agent(
+            interaction_type=interaction_type,
+            force_model=force_model,
+            headers=headers,
+            input_data=input_data,
+            url=url,
+            user_agent=user_agent
         )
     
     @staticmethod

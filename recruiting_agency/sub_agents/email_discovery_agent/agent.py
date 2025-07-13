@@ -21,7 +21,11 @@ from .tools import (
     find_company_admin_emails_tool,
     verify_email_tool,
     bulk_email_finder_tool,
-    enrich_contact_data_tool
+    enrich_contact_data_tool,
+    send_email_tool,
+    send_bulk_emails_tool,
+    send_follow_up_email_tool,
+    create_email_campaign_tool
 )
 from ...model_selector import get_model_for_interaction, TEXT_MODEL
 
@@ -33,7 +37,8 @@ email_discovery_agent = Agent(
     name="email_discovery_agent",
     description=(
         "Specialized agent for finding and verifying email addresses of individuals "
-        "and company admin contacts. Uses multiple data sources and verification methods."
+        "and company admin contacts. Can also send emails directly using SMTP. "
+        "Uses multiple data sources and verification methods."
     ),
     instruction=prompt.EMAIL_DISCOVERY_PROMPT,
     output_key="email_discovery_output",
@@ -42,6 +47,10 @@ email_discovery_agent = Agent(
         find_company_admin_emails_tool,
         verify_email_tool,
         bulk_email_finder_tool,
-        enrich_contact_data_tool
+        enrich_contact_data_tool,
+        send_email_tool,
+        send_bulk_emails_tool,
+        send_follow_up_email_tool,
+        create_email_campaign_tool
     ],
 ) 

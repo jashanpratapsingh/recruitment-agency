@@ -22,6 +22,7 @@ from .agent_factory import (
     create_auto_agent,
     root_agent
 )
+from .sub_agents.email_sender_agent import email_sender_agent
 
 # For backward compatibility, also export the default agent
 recruiting_coordinator = root_agent
@@ -33,5 +34,6 @@ __all__ = [
     "create_text_agent",
     "create_auto_agent",
     "recruiting_coordinator",
-    "root_agent"
+    "root_agent",
+    "email_sender_agent"
 ] 
